@@ -1,14 +1,18 @@
-#preprocessing data from txt format in csv
 import re
 import pandas as pd
+
 
 def preprocess(data):
     pattern = '\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s-\s'
     messages = re.split(pattern, data)[1:]
     dates = re.findall(pattern, data)
     df = pd.DataFrame({'user_message': messages, 'message_date': dates})
-    # convert message_date type
-    df['message_date'] = pd.to_datetime(df['message_date'],format='%m/%d/%y, %H:%M - ')
+
+    # Define the correct format for the date and time strings
+    date_format = '%d/%m/%Y, %H:%M - '
+
+    # Convert message_date type using the correct format
+    df['message_date'] = pd.to_datetime(df['message_date'], format=date_format)
 
     df.rename(columns={'message_date': 'date'}, inplace=True)
 
